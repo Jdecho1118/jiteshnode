@@ -1,0 +1,33 @@
+module.exports = {
+    main: async function (req, res) {
+        try {
+            const { MongoClient } = require('mongodb');
+            const url = 'mongodb://localhost:27017';
+            const client = new MongoClient(url);
+
+            const dbName = 'chaitanya_mongo_db';
+
+
+        await client.connect();
+        console.log('mongoDB Connected successfully to server');
+        const db = client.db(dbName);
+        const collection = db.collection('documents');
+        
+
+        if (Array.isArray(req.body)) {
+            let y = await db.collection('clients').insertMany(req.body);
+            res.send(y);    
+        }
+        else{
+            let x = await db.collection('clients').insertOne(
+               req.body
+            );
+            res.send(x);
+        }
+       
+
+    } catch(error){
+        console.log("error",error);
+    }
+}
+}
